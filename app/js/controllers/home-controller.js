@@ -1,4 +1,6 @@
-angular.module('issueTrackingSystem.home', [])
+angular.module('issueTrackingSystem.home', [
+    'issueTrackingSystem.authentication'
+])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/', {
             templateUrl: 'app/templates/views/home.html',
@@ -7,12 +9,27 @@ angular.module('issueTrackingSystem.home', [])
     }])
     .controller('HomeCtrl', [
         '$scope',
-        function($scope) {
+        'authentication',
+        function($scope, authentication) {
             $scope.login = function (user) {
-                console.log(user);
+                authentication.loginUser(user)
+                    .then(function(){
+                        return authentication.getCurrentUser();
+                    });
             };
 
             $scope.register = function (user) {
-                console.log(user);
+                if(user.password !== user.confirmPassword) {
+                    console.warn('Passwords do not match!');
+                }
+                else {
+                    authentication.registerUser(user)
+                        .then(function () {
+                            return authentication.loginUser(user);
+                        })
+                        .then(function () {
+                            return authentication.getCurrentUser();
+                        });
+                }
             };
         }]);
