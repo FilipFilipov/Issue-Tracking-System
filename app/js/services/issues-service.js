@@ -20,7 +20,21 @@ angular.module('issueTrackingSystem.issues', [])
                 return deferred.promise;
             }
 
+            function getProjectIssues(id) {
+                var deferred = $q.defer();
+
+                $http.get(BASE_URL + 'projects/' + id + '/Issues')
+                    .then(function(response) {
+                        deferred.resolve(response.data)
+                    }, function(error) {
+                        console.log(error);
+                    });
+
+                return deferred.promise;
+            }
+
             return {
-                getUserIssues: getUserIssues
+                getUserIssues: getUserIssues,
+                getProjectIssues: getProjectIssues
             }
         }]);

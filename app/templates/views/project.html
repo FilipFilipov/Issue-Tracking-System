@@ -1,0 +1,38 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">Project Page</div>
+    <div class="panel-body">
+        <div class="col-md-4 border">
+            <p ng-if="canEdit">
+                <a class="btn btn-success" href="#/projects/{{project.Id}}/edit">Edit</a>
+                <a class="btn btn-success" href="#/projects/{{project.Id}}/add-issue">Add Issue</a>
+            </p>
+            <p><strong>Project key: </strong>{{project.ProjectKey}}</p>
+            <p><strong>Name: </strong>{{project.Name}}</p>
+            <p><strong>Description: </strong>{{project.Description}}</p>
+            <p><strong>Lead: </strong>{{project.Lead.Username}}</p>
+            <p><strong>Labels: </strong>{{project.Labels}}</p>
+            <p><strong>Priorities: </strong>{{project.Priorities}}</p>
+        </div>
+        <div class="col-md-7 col-md-offset-1 border">
+            <h3>Issues</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Due Date</th>
+                        <th>Assignee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="issue in issues">
+                        <td><a href="#/issues/{{issue.Id}}">{{issue.Title}}</a></td>
+                        <td>{{issue.Description}}</td>
+                        <td>{{issue.DueDate}}</td>
+                        <td><a href="#/projects/{{issue.Assignee.Id}}">{{issue.Assignee.Username}}</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
