@@ -1,0 +1,34 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">Dashboard</div>
+    <div class="panel-body">
+        <div class="col-md-3 col-md-offset-1 border">
+            <h3>Affiliated Projects</h3>
+
+            <div ng-repeat="project in userProjects | unique:'Name' | orderBy:'Name'">
+                <a href="#/projects/{{project.Id}}">{{project.Name}}</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-md-offset-1 border">
+            <h3>Assigned Issues</h3>
+            <pagination total-items="userIssues.TotalCount" ng-model="issueParams.pageNumber" items-per-page="issueParams.pageSize" ng-change="reloadIssues()" max-size="9" boundary-links="true"></pagination>
+            <table ng-cloak="" class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Project</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="issue in userIssues.Issues | limitTo:issueParams.pageSize">
+                        <td><a href="#/issues/{{issue.Id}}">{{issue.Title}}</a></td>
+                        <td>{{issue.Description}}</td>
+                        <td><a href="#/projects/{{issue.Project.Id}}">{{issue.Project.Name}}</a></td>
+                        <td>{{issue.DueDate}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

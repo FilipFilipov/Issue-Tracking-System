@@ -30,12 +30,8 @@
                 <span class="icon-bar"></span>
             </button>
         </div>
-        <div class="navbar-collapse collapse" id="navbar-main">
-            <ul ng-if="isAuthenticated" ng-cloak class="nav navbar-nav">
-                <li>
-                    <a>{{currentUser.Username}}</a>
-                </li>
-            </ul>
+        <nav class="navbar-collapse collapse" id="navbar-main">
+            <p class="navbar-text">{{currentUser.Username}}</p>
             <ul ng-if="isAuthenticated" ng-cloak class="nav navbar-nav pull-right">
                 <li>
                     <a href="#/profile/password">Change Password</a>
@@ -44,7 +40,7 @@
                     <a ng-click="logout()" href="#/logout">Logout</a>
                 </li>
             </ul>
-        </div>
+        </nav>
     </div>
 </div>
 
@@ -67,7 +63,11 @@
 <script src="app/bower_components/angular/angular.js"></script>
 <script src="app/bower_components/angular-route/angular-route.js"></script>
 <script src="app/app.js"></script>
+<script src="app/bower_components/angular-ui-bootstrap-pagination/pagination.js"></script>
 <script src="app/js/controllers/home-controller.js"></script>
 <script src="app/js/services/authentication-service.js"></script>
+<script src="app/js/services/issues-service.js"></script>
+<script src="app/js/services/projects-service.js"></script>
+<script src="app/js/filters/unique-filter.js"></script>
 </body>
 </html>

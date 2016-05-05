@@ -9,27 +9,72 @@ angular.module('issueTrackingSystem.home', [
     }])
     .controller('HomeCtrl', [
         '$scope',
+        '$rootScope',
+        '$route',
+        '$q',
         'authentication',
-        function($scope, authentication) {
-            $scope.login = function (user) {
-                authentication.loginUser(user)
-                    .then(function(){
-                        return authentication.getCurrentUser();
-                    });
-            };
+        'issues',
+        'projects',
+        function($scope, $rootScope, $route, $q, authentication, issues, projects) {
+            $scope.isAuthenticated = $rootScope.isAuthenticated;
 
-            $scope.register = function (user) {
-                if(user.password !== user.confirmPassword) {
-                    console.warn('Passwords do not match!');
-                }
-                else {
-                    authentication.registerUser(user)
-                        .then(function () {
-                            return authentication.loginUser(user);
-                        })
-                        .then(function () {
+            if ($scope.isAuthenticated) {
+                $scope.issueParams = {
+                    pageSize: 5,
+                    pageNumber: 1
+                };
+
+                $q.all([
+                    issues.getUserIssues({ orderBy: "DueDate desc" }),
+                    projects.getUserProjects({filter: 'Lead.Id="' + $rootScope.currentUser.Id + '"'})
+                ]).then(function (data) {
+                    var userIssues = data[0];
+                    var userProjects = data[1];
+                    var userIssueProjects = userIssues.Issues.map(function(issue){
+                        return issue.Project;
+                    });
+
+                    $scope.userIssues = userIssues;
+                    $scope.userProjects = userProjects.concat(userIssueProjects);
+
+                    $scope.reloadIssues = function() {
+                        $scope.issueParams.orderBy = "DueDate desc";
+
+                        issues.getUserIssues($scope.issueParams)
+                            .then(function (paginatedIssues) {
+                                $scope.userIssues = paginatedIssues;
+                            });
+                    }
+                });
+            }
+            else {
+                $scope.login = function (user) {
+                    authentication.loginUser(user)
+                        .then(function(){
                             return authentication.getCurrentUser();
+                        })
+                        .then(function() {
+                            $route.reload();
                         });
-                }
-            };
-        }]);
+                };
+
+                $scope.register = function (user) {
+                    if(user.password !== user.confirmPassword) {
+                        console.warn('Passwords do not match!');
+                    }
+                    else {
+                        authentication.registerUser(user)
+                            .then(function () {
+                                return authentication.loginUser(user);
+                            })
+                            .then(function () {
+                                return authentication.getCurrentUser();
+                            })
+                            .then(function() {
+                                $route.reload();
+                            });
+                    }
+                };
+            }
+        }
+    ]);
