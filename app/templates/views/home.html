@@ -20,7 +20,7 @@
             <input type="password" required minlength="6" maxlength="100" ng-model="registerUser.password" id="reg-password" class="form-control" />
             <br />
             <label for="reg-confirm-password">Confirm Password</label>
-            <input type="password" required minlength="6" maxlength="100" ng-model="registerUser.confirmPassword" id="reg-confirm-password" class="form-control" />
+            <input type="password" required ng-model="registerUser.confirmPassword" id="reg-confirm-password" class="form-control" />
             <br />
             <button class="btn btn-primary" ng-click="register(registerUser)">Register</button>
         </form>

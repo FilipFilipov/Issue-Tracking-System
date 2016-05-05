@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
     <script src="app/bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
-<body>
+<body ng-controller="MainCtrl">
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -31,6 +31,19 @@
             </button>
         </div>
         <div class="navbar-collapse collapse" id="navbar-main">
+            <ul ng-if="isAuthenticated" ng-cloak class="nav navbar-nav">
+                <li>
+                    <a>{{currentUser.Username}}</a>
+                </li>
+            </ul>
+            <ul ng-if="isAuthenticated" ng-cloak class="nav navbar-nav pull-right">
+                <li>
+                    <a href="#/profile/password">Change Password</a>
+                </li>
+                <li>
+                    <a ng-click="logout()" href="#/logout">Logout</a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

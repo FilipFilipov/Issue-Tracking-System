@@ -1,11 +1,12 @@
 angular.module('issueTrackingSystem.authentication', [])
     .factory('authentication', [
+        '$rootScope',
         '$http',
         '$q',
         '$location',
         '$httpParamSerializerJQLike',
         'BASE_URL',
-        function($http, $q, $location, $httpParamSerializerJQLike, BASE_URL) {
+        function($rootScope, $http, $q, $location, $httpParamSerializerJQLike, BASE_URL) {
             function registerUser(user) {
                 var deferred = $q.defer();
 
@@ -26,9 +27,10 @@ angular.module('issueTrackingSystem.authentication', [])
                 $http.post(
                     BASE_URL + 'api/Token', $httpParamSerializerJQLike(user))
                     .then(function(response){
-                        console.log(response);
-                        localStorage['currentUserToken'] = JSON.stringify(response);
+                        delete sessionStorage['currentUser'];
+                        localStorage['currentUserToken'] = JSON.stringify(response.data);
                         $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.access_token;
+
                         deferred.resolve();
                     }, function (error) {
                         console.log(error);
@@ -39,53 +41,74 @@ angular.module('issueTrackingSystem.authentication', [])
 
             function getCurrentUser() {
                 var deferred = $q.defer();
-
                 if(sessionStorage['currentUser']) {
-                    return $q.when(JSON.parse(sessionStorage['currentUser']));
+                    var user = JSON.parse(sessionStorage['currentUser']);
+                    $rootScope.currentUser = user;
+                    $rootScope.isAuthenticated = true;
+
+                    return $q.when(user);
                 }
 
                 else if (localStorage['currentUserToken']) {
                     $http.get(BASE_URL + 'users/me')
                         .then(function(user) {
-                            console.log(user);
-                            sessionStorage['currentUser'] = JSON.stringify(user);
+                            sessionStorage['currentUser'] = JSON.stringify(user.data);
+                            $rootScope.currentUser = user.data;
+                            $rootScope.isAuthenticated = true;
+
                             deferred.resolve(user);
                         }, function (error) {
                             console.log(error);
                         });
-
-                    return deferred.promise;
                 }
+                return deferred.promise;
             }
 
-            function isAuthenticated() {
-                return localStorage['currentUserToken'] && sessionStorage['currentUser'];
-            }
+            function setAuthHeaders(){
+                if (localStorage['currentUserToken']) {
+                    var tokenObj = JSON.parse(localStorage['currentUserToken']);
+                    var expireDate = new Date(tokenObj['.expires']);
 
-            function isAdmin() {
-                return sessionStorage['currentUser'] && JSON.parse(sessionStorage['currentUser']).isAdmin;
-            }
-
-            function refreshHeaders() {
-                if (localStorage['currentUserToken']){
-                    $http.defaults.headers.common.Authorization = 'Bearer ' + JSON.parse(localStorage['currentUserToken']).access_token;
+                    if (new Date() > expireDate) {
+                        logout();
+                    }
+                    else {
+                        $http.defaults.headers.common.Authorization = 'Bearer ' + tokenObj.access_token;
+                    }
                 }
+
+            }
+
+            function changePassword(password) {
+                var deferred = $q.defer();
+
+                $http.post(BASE_URL + 'api/Account/ChangePassword', password)
+                    .then(function(){
+                        deferred.resolve();
+                    }, function (error) {
+                        console.log(error);
+                    });
+
+                return deferred.promise;
             }
 
             function logout() {
                 delete sessionStorage['currentUser'];
                 delete localStorage['currentUserToken'];
                 $http.defaults.headers.common.Authorization = undefined;
+
+                $rootScope.currentUser = undefined;
+                $rootScope.isAuthenticated = false;
+
                 $location.path('/');
             }
 
             return {
                 registerUser: registerUser,
                 loginUser: loginUser,
-                isAuthenticated: isAuthenticated,
-                isAdmin: isAdmin,
                 getCurrentUser: getCurrentUser,
-                refreshHeaders: refreshHeaders,
+                setAuthHeaders: setAuthHeaders,
+                changePassword: changePassword,
                 logout: logout
             }
         }]);
