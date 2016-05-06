@@ -12,7 +12,7 @@
                 <br>
                 <label for="issue-assignee">Assignee</label>
                 <br>
-                <select id="issue-assignee" ng-required ng-model="model.assignee" ng-options="user.Username for user in users track by user.Id"></select>
+                <select id="issue-assignee" ng-required ng-model="model.assignee" ng-options="user.Username for user in users | orderBy:'Username' track by user.Id"></select>
                 <br><br>
                 <label for="issue-priority">Priority</label>
                 <br>

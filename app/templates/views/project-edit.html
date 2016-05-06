@@ -1,0 +1,30 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">Project Edit Page</div>
+    <div class="panel-body">
+        <div class="col-md-6 border">
+            <form name="editProjectForm">
+                <label for="project-name">Title</label>
+                <input type="text" required ng-model="model.name" id="project-name" class="form-control" />
+                <br>
+                <label for="project-description">Description</label>
+                <br>
+                <textarea required ng-model="model.description" id="project-description" class="form-control"></textarea>
+                <br>
+                <label for="project-lead">Lead</label>
+                <br>
+                <select id="project-lead" ng-required ng-model="model.lead" ng-options="user.Username for user in users | orderBy:'Username' track by user.Id"></select>
+                <br><br>
+                <label for="project-priorities">Priorities</label>
+                <br>
+                <tags-input id="project-priorities" ng-model="model.priorities" placeholder="Add a priority" display-property="Name" key-property="Name"></tags-input>
+                <br>
+                <label for="project-labels">Labels</label>
+                <tags-input id="project-labels" ng-model="model.labels" placeholder="Add a label" display-property="Name" key-property="Name">
+                    <auto-complete source="loadLabels($query)" min-length="2"></auto-complete>
+                </tags-input>
+                <br>
+                <button class="btn btn-primary" ng-click="save(model)">Save</button>
+            </form>
+        </div>
+    </div>
+</div>

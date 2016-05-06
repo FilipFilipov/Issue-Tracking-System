@@ -34,8 +34,22 @@ angular.module('issueTrackingSystem.projects')
                 return deferred.promise;
             }
 
+            function editProject(projectId, project) {
+                var deferred = $q.defer();
+
+                $http.put(BASE_URL + 'projects/' + projectId, project)
+                    .then(function(response) {
+                        deferred.resolve(response.data)
+                    }, function(error) {
+                        console.log(error);
+                    });
+
+                return deferred.promise;
+            }
+
             return {
                 getProjectById: getProjectById,
-                getUserProjects: getUserProjects
+                getUserProjects: getUserProjects,
+                editProject: editProject
             }
         }]);

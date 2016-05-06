@@ -15,11 +15,12 @@ angular.module('issueTrackingSystem.issues', [])
         '$rootScope',
         '$q',
         '$routeParams',
+        '$location',
         'users',
         'issues',
         'projects',
         'labels',
-        function($scope, $rootScope, $q, $routeParams, users, issues, projects, labels) {
+        function($scope, $rootScope, $q, $routeParams, $location, users, issues, projects, labels) {
             var issueId = $routeParams.id;
             var userId = $rootScope.currentUser.Id;
             var issue, project;
@@ -71,6 +72,9 @@ angular.module('issueTrackingSystem.issues', [])
                                     issue.assigneeId = issue.assignee.Id;
                                     issue.priorityId = issue.priority.Id;
                                     issues.editIssue(issueId, issue)
+                                        .then(function() {
+                                            $location.path('/issues/' + issueId);
+                                        })
                                 };
 
                                 $scope.loadLabels = function(query) {

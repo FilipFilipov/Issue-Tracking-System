@@ -11,9 +11,9 @@
             <p><strong>Description: </strong>{{project.Description}}</p>
             <p><strong>Lead: </strong>{{project.Lead.Username}}</p>
             <p><strong>Labels: </strong>{{project.Labels | property:"Name" | join:', '}}</p>
-            <p><strong>Priorities: </strong>{{project.Priorities | property:"Name" | join:', '}}</p>
+            <p><strong>Priorities: </strong>{{project.Priorities | property:'Name' | join:', '}}</p>
         </div>
-        <div class="col-md-7 col-md-offset-1 border">
+        <div ng-hide="issues.length === 0" class="col-md-7 col-md-offset-1 border">
             <h3>Issues</h3>
             <table class="table">
                 <thead>
