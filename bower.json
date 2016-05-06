@@ -13,8 +13,10 @@
     "html5-boilerplate": "~5.2.0",
     "jquery": "^2.2.3",
     "bootstrap": "^3.3.6",
-    "jquery-ui": "^1.11.4",
     "noty": "^2.3.8",
-    "angular-ui-bootstrap-pagination": "^0.12.0"
+    "angular-ui-bootstrap-pagination": "^0.12.0",
+    "angularjs-datepicker": "^2.1.0",
+    "ng-tags-input": "3.0.0",
+    "angular-filters": "^1.1.2"
   }
 }

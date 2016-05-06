@@ -21,16 +21,6 @@ angular.module('issueTrackingSystem.projects', [])
                 var project = data[0];
                 var issues = data[1];
 
-                var labels = project.Labels.map(function(label){
-                    return label.Name;
-                });
-                project.Labels = labels.join(', ');
-
-                var priorities = project.Priorities.map(function(priority){
-                    return priority.Name;
-                });
-                project.Priorities = priorities.join(', ');
-
                 $scope.project = project;
                 $scope.issues = issues;
                 $scope.canEdit = project.Lead.Id === $rootScope.currentUser.Id

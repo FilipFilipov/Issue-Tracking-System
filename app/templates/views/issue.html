@@ -13,7 +13,7 @@
             <p><strong>Author: </strong>{{issue.Author.Username}}</p>
             <p><strong>Project: </strong>{{issue.Project.Name}}</p>
             <p><strong>Status: </strong>{{issue.Status.Name}}</p>
-            <p><strong>Labels: </strong>{{issue.Labels}}</p>
+            <p><strong>Labels: </strong>{{issue.Labels | property:"Name" | join:', '}}</p>
         </div>
         <div ng-if="canChangeStatus && issue.AvailableStatuses.length > 0" class="col-md-5 col-md-offset-1 border">
             <h3>Available Statuses</h3>

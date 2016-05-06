@@ -4,10 +4,15 @@
 angular.module('issueTrackingSystem', [
     'ngRoute',
     'ui.bootstrap.pagination',
+    '720kb.datepicker',
+    'ngTagsInput',
+    'frapontillo.ex.filters',
     'issueTrackingSystem.home',
     'issueTrackingSystem.authentication',
+    'issueTrackingSystem.users',
     'issueTrackingSystem.issues',
     'issueTrackingSystem.projects',
+    'issueTrackingSystem.labels',
     'issueTrackingSystem.filters.unique'
 ])
     .controller('MainCtrl', [
@@ -16,7 +21,8 @@ angular.module('issueTrackingSystem', [
         '$location',
         '$route',
         'authentication',
-        function($rootScope, $scope, $location, $route, authentication) {
+        'users',
+        function($rootScope, $scope, $location, $route, authentication, users) {
             $scope.logout = function() {
                 authentication.logout();
 
@@ -39,7 +45,8 @@ angular.module('issueTrackingSystem', [
         '$rootScope',
         '$location',
         'authentication',
-        function ($rootScope, $location, authentication) {
+        'users',
+        function ($rootScope, $location, authentication, users) {
             $rootScope.$on('$locationChangeStart', function () {
                 if (!$rootScope.isAuthenticated && $location.path() !== '/') {
                     $location.path('/');
@@ -47,7 +54,7 @@ angular.module('issueTrackingSystem', [
             });
 
             authentication.setAuthHeaders();
-            authentication.getCurrentUser();
+            users.getCurrentUser();
         }
     ])
     .config([

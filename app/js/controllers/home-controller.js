@@ -13,9 +13,10 @@ angular.module('issueTrackingSystem.home', [
         '$route',
         '$q',
         'authentication',
+        'users',
         'issues',
         'projects',
-        function($scope, $rootScope, $route, $q, authentication, issues, projects) {
+        function($scope, $rootScope, $route, $q, authentication, users, issues, projects) {
             $scope.isAuthenticated = $rootScope.isAuthenticated;
 
             if ($scope.isAuthenticated) {
@@ -51,7 +52,7 @@ angular.module('issueTrackingSystem.home', [
                 $scope.login = function (user) {
                     authentication.loginUser(user)
                         .then(function(){
-                            return authentication.getCurrentUser();
+                            return users.getCurrentUser();
                         })
                         .then(function() {
                             $route.reload();
@@ -68,7 +69,7 @@ angular.module('issueTrackingSystem.home', [
                                 return authentication.loginUser(user);
                             })
                             .then(function () {
-                                return authentication.getCurrentUser();
+                                return users.getCurrentUser();
                             })
                             .then(function() {
                                 $route.reload();

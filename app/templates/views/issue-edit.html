@@ -1,0 +1,35 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">Issue Edit Page</div>
+    <div class="panel-body">
+        <div class="col-md-6 border">
+            <form name="editIssueForm">
+                <label for="issue-title">Title</label>
+                <input type="text" required ng-model="model.title" id="issue-title" class="form-control" />
+                <br>
+                <label for="issue-description">Description</label>
+                <br>
+                <textarea required ng-model="model.description" id="issue-description" class="form-control"></textarea>
+                <br>
+                <label for="issue-assignee">Assignee</label>
+                <br>
+                <select id="issue-assignee" ng-required ng-model="model.assignee" ng-options="user.Username for user in users track by user.Id"></select>
+                <br><br>
+                <label for="issue-priority">Priority</label>
+                <br>
+                <select id="issue-priority" ng-required ng-model="model.priority" ng-options="priority.Name for priority in priorities track by priority.Id"></select>
+                <br><br>
+                <label for="issue-due-date">Due Date</label>
+                <datepicker date-format="yyyy-MM-ddTHH:mm:ss">
+                    <input required ng-model="model.dueDate" id="issue-due-date" class="form-control"/>
+                </datepicker>
+                <br><br><br><br>
+                <label for="issue-labels">Labels</label>
+                <tags-input id="issue-labels" ng-model="model.labels" placeholder="Add a label" display-property="Name" key-property="Name">
+                    <auto-complete source="loadLabels($query)" min-length="2"></auto-complete>
+                </tags-input>
+                <br>
+                <button class="btn btn-primary" ng-click="save(model)">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
