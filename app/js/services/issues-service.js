@@ -1,10 +1,23 @@
-angular.module('issueTrackingSystem.issues', [])
+angular.module('issueTrackingSystem.issues')
     .factory('issues', [
         '$http',
         '$q',
         '$httpParamSerializerJQLike',
         'BASE_URL',
         function($http, $q, $httpParamSerializerJQLike, BASE_URL) {
+            function getIssueById(id) {
+                var deferred = $q.defer();
+
+                $http.get(BASE_URL + 'issues/' + id)
+                    .then(function(response) {
+                        deferred.resolve(response.data)
+                    }, function(error) {
+                        console.log(error);
+                    });
+
+                return deferred.promise;
+            }
+
             function getUserIssues(issuesParams) {
                 var deferred = $q.defer();
 
@@ -33,8 +46,23 @@ angular.module('issueTrackingSystem.issues', [])
                 return deferred.promise;
             }
 
+            function changeIssueStatus(issueId, statusId) {
+                var deferred = $q.defer();
+
+                $http.put(BASE_URL + 'issues/' + issueId + '/changestatus?statusId=' + statusId)
+                    .then(function(response) {
+                        deferred.resolve(response.data)
+                    }, function(error) {
+                        console.log(error);
+                    });
+
+                return deferred.promise;
+            }
+
             return {
+                getIssueById: getIssueById,
                 getUserIssues: getUserIssues,
-                getProjectIssues: getProjectIssues
+                getProjectIssues: getProjectIssues,
+                changeIssueStatus: changeIssueStatus
             }
         }]);

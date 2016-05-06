@@ -1,14 +1,14 @@
 <div class="panel panel-primary">
     <div class="panel-heading">Dashboard</div>
     <div class="panel-body">
-        <div class="col-md-3 col-md-offset-1 border">
+        <div class="col-md-4 border">
             <h3>Affiliated Projects</h3>
 
             <div ng-repeat="project in userProjects | unique:'Name' | orderBy:'Name'">
                 <a href="#/projects/{{project.Id}}">{{project.Name}}</a>
             </div>
         </div>
-        <div class="col-md-6 col-md-offset-1 border">
+        <div class="col-md-7 col-md-offset-1 border">
             <h3>Assigned Issues</h3>
             <pagination total-items="userIssues.TotalCount" ng-model="issueParams.pageNumber" items-per-page="issueParams.pageSize" ng-change="reloadIssues()" max-size="9" boundary-links="true"></pagination>
             <table class="table">

@@ -1,0 +1,25 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">Issue Page</div>
+    <div class="panel-body">
+        <div class="col-md-6 border">
+            <p ng-if="canEdit">
+                <a class="btn btn-success" href="#/issues/{{issue.Id}}/edit">Edit</a>
+            </p>
+            <p><strong>Title: </strong>{{issue.Title}}</p>
+            <p><strong>Description: </strong>{{issue.Description}}</p>
+            <p><strong>Assignee: </strong>{{issue.Assignee.Username}}</p>
+            <p><strong>Priority: </strong>{{issue.Priority.Name}}</p>
+            <p><strong>Due Date: </strong>{{issue.DueDate}}</p>
+            <p><strong>Author: </strong>{{issue.Author.Username}}</p>
+            <p><strong>Project: </strong>{{issue.Project.Name}}</p>
+            <p><strong>Status: </strong>{{issue.Status.Name}}</p>
+            <p><strong>Labels: </strong>{{issue.Labels}}</p>
+        </div>
+        <div ng-if="canChangeStatus && issue.AvailableStatuses.length > 0" class="col-md-5 col-md-offset-1 border">
+            <h3>Available Statuses</h3>
+            <div class="btn-group">
+                <button ng-repeat="status in issue.AvailableStatuses" class="btn btn-sm btn-success" ng-click="changeStatus(issue.Id, status)">{{status.Name}}</button>
+            </div>
+        </div>
+    </div>
+</div>
