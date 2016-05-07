@@ -3,29 +3,35 @@
     <div class="panel-heading" ng-if="newIssue">Add Issue Page</div>
     <div class="panel-body">
         <div class="col-md-6 border">
-            <form name="editIssueForm">
-                <label for="issue-title">Title</label>
+            <form name="issueForm" ng-class="{ submitFailed: submitFailed }">
+                <label for="issue-title">Title<span>*</span></label>
                 <input type="text" required ng-model="model.title" id="issue-title" class="form-control" />
                 <br>
-                <label for="issue-description">Description</label>
+                <label for="issue-description">Description<span>*</span></label>
                 <br>
                 <textarea required ng-model="model.description" id="issue-description" class="form-control"></textarea>
                 <br>
                 <div ng-if="newIssue">
-                    <label for="issue-project">Project</label>
+                    <label for="issue-project">Project<span>*</span></label>
                     <br>
-                    <select id="issue-project" ng-required ng-model="model.project" ng-change="updatePriorities()" ng-options="project.Name for project in projects | orderBy:'Name' track by project.Id"></select>
+                    <select id="issue-project" ng-required="true" ng-model="model.project" ng-change="updatePriorities()" ng-options="project.Name for project in projects | orderBy:'Name' track by project.Id">
+                        <option value="">-- Choose project --</option>
+                    </select>
                     <br><br>
                 </div>
-                <label for="issue-assignee">Assignee</label>
+                <label for="issue-assignee">Assignee<span>*</span></label>
                 <br>
-                <select id="issue-assignee" ng-required ng-model="model.assignee" ng-options="user.Username for user in users | orderBy:'Username' track by user.Id"></select>
+                <select id="issue-assignee" ng-required="true" ng-model="model.assignee" ng-options="user.Username for user in users | orderBy:'Username' track by user.Id">
+                    <option value="">-- Choose assignee --</option>
+                </select>
                 <br><br>
-                <label for="issue-priority">Priority</label>
+                <label for="issue-priority">Priority<span>*</span></label>
                 <br>
-                <select id="issue-priority" ng-required ng-model="model.priority" ng-options="priority.Name for priority in priorities track by priority.Id"></select>
+                <select id="issue-priority" ng-required="true" ng-model="model.priority" ng-options="priority.Name for priority in priorities track by priority.Id">
+                    <option value="">-- Choose priority --</option>
+                </select>
                 <br><br>
-                <label for="issue-due-date">Due Date</label>
+                <label for="issue-due-date">Due Date<span>*</span></label>
                 <datepicker date-format="yyyy-MM-ddTHH:mm:ss">
                     <input required ng-model="model.dueDate" id="issue-due-date" class="form-control"/>
                 </datepicker>

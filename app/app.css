@@ -1,8 +1,4 @@
 /* app css stylesheet */
-body {
-    padding-top: 70px;
-}
-
 .menu {
     list-style: none;
     border-bottom: 0.1em solid black;
@@ -30,4 +26,21 @@ body {
 .menu > li:nth-child(1):before {
     content: "";
     padding: 0;
+}
+
+label > span {
+    color: red;
+}
+
+select.ng-pristine.ng-invalid-required {
+    box-shadow: none;
+}
+
+.submitFailed input.ng-invalid,
+.submitFailed textarea.ng-invalid,
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched,
+.submitFailed select.ng-invalid-required,
+select.ng-invalid-required.ng-touched {
+    box-shadow: 0 0 2px red;
 }

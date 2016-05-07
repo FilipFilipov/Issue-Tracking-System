@@ -50,31 +50,42 @@ angular.module('issueTrackingSystem.home', [
             }
             else {
                 $scope.login = function (user) {
-                    authentication.loginUser(user)
-                        .then(function(){
-                            return users.getCurrentUser();
-                        })
-                        .then(function() {
-                            $route.reload();
-                        });
-                };
-
-                $scope.register = function (user) {
-                    if(user.password !== user.confirmPassword) {
-                        console.warn('Passwords do not match!');
-                    }
-                    else {
-                        authentication.registerUser(user)
-                            .then(function () {
-                                return authentication.loginUser(user);
-                            })
-                            .then(function () {
+                    if($scope.loginUserForm.$valid) {
+                        authentication.loginUser(user)
+                            .then(function(){
                                 return users.getCurrentUser();
                             })
                             .then(function() {
                                 $route.reload();
                             });
                     }
+                    else {
+                        $scope.loginFailed = true;
+                    }
+                };
+
+                $scope.register = function (user) {
+                    if($scope.changePasswordForm.$valid) {
+                        if(user.password !== user.confirmPassword) {
+                            console.warn('Passwords do not match!');
+                        }
+                        else {
+                            authentication.registerUser(user)
+                                .then(function () {
+                                    return authentication.loginUser(user);
+                                })
+                                .then(function () {
+                                    return users.getCurrentUser();
+                                })
+                                .then(function() {
+                                    $route.reload();
+                                });
+                        }
+                    }
+                    else {
+                        $scope.registerFailed = true;
+                    }
+
                 };
             }
         }

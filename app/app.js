@@ -32,11 +32,17 @@ angular.module('issueTrackingSystem', [
             };
 
             $scope.changePassword = function(password){
-                if(password.newPassword !== password.confirmPassword) {
-                    console.warn('Passwords do not match!');
+                if($scope.changePasswordForm.$valid) {
+                    if(password.newPassword !== password.confirmPassword) {
+                        console.warn('Passwords do not match!');
+                    }
+                    else{
+                        authentication.changePassword(password);
+                        $location.path('/');
+                    }
                 }
-                else{
-                    authentication.changePassword(password);
+                else {
+                    $scope.submitFailed = true;
                 }
             }
         }

@@ -94,7 +94,7 @@ angular.module('issueTrackingSystem.issues', [])
                                     return project.Id == projectId
                                 })[0];
                                 var currentPriority = newIssue ?
-                                    {} :
+                                    undefined :
                                     project.Priorities.filter(function(priority) {
                                         return priority.Id == issue.Priority.Id
                                     })[0];
@@ -113,21 +113,26 @@ angular.module('issueTrackingSystem.issues', [])
                                 };
 
                                 $scope.save = function(issue, newIssue) {
-                                    issue.assigneeId = issue.assignee.Id;
-                                    issue.priorityId = issue.priority.Id;
+                                    if($scope.issueForm.$valid) {
+                                        issue.assigneeId = issue.assignee.Id;
+                                        issue.priorityId = issue.priority.Id;
 
-                                    if(newIssue) {
-                                        issue.projectId = issue.project.Id;
-                                        issues.addIssue(issue)
-                                            .then(function() {
-                                                $location.path('/projects/' + projectId);
-                                            })
+                                        if(newIssue) {
+                                            issue.projectId = issue.project.Id;
+                                            issues.addIssue(issue)
+                                                .then(function() {
+                                                    $location.path('/projects/' + projectId);
+                                                })
+                                        }
+                                        else {
+                                            issues.editIssue(issueId, issue)
+                                                .then(function() {
+                                                    $location.path('/issues/' + issueId);
+                                                })
+                                        }
                                     }
                                     else {
-                                        issues.editIssue(issueId, issue)
-                                            .then(function() {
-                                                $location.path('/issues/' + issueId);
-                                            })
+                                        $scope.submitFailed = true;
                                     }
                                 };
 
@@ -140,7 +145,7 @@ angular.module('issueTrackingSystem.issues', [])
 
                                 $scope.loadLabels = function(query) {
                                     return labels.getLabels(query);
-                                }
+                                };
                             });
                     }
                 });

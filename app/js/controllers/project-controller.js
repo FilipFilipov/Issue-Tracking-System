@@ -52,11 +52,18 @@ angular.module('issueTrackingSystem.projects', [])
                             };
 
                             $scope.save = function(project) {
-                                project.leadId = project.lead.Id;
-                                projects.editProject(projectId, project)
-                                    .then(function() {
-                                        $location.path('/projects/' + projectId);
-                                    })
+                                console.log($scope);
+                                if($scope.projectForm.$valid) {
+                                    project.leadId = project.lead.Id;
+                                    projects.editProject(projectId, project)
+                                        .then(function() {
+                                            $location.path('/projects/' + projectId);
+                                        })
+                                }
+                                else {
+                                    $scope.submitFailed = true;
+                                }
+
                             };
 
                             $scope.loadLabels = function(query) {
