@@ -1,5 +1,6 @@
 <div class="panel panel-primary">
-    <div class="panel-heading">Issue Edit Page</div>
+    <div class="panel-heading" ng-if="!newIssue">Edit Issue Page</div>
+    <div class="panel-heading" ng-if="newIssue">Add Issue Page</div>
     <div class="panel-body">
         <div class="col-md-6 border">
             <form name="editIssueForm">
@@ -10,6 +11,12 @@
                 <br>
                 <textarea required ng-model="model.description" id="issue-description" class="form-control"></textarea>
                 <br>
+                <div ng-if="newIssue">
+                    <label for="issue-project">Project</label>
+                    <br>
+                    <select id="issue-project" ng-required ng-model="model.project" ng-change="updatePriorities()" ng-options="project.Name for project in projects | orderBy:'Name' track by project.Id"></select>
+                    <br><br>
+                </div>
                 <label for="issue-assignee">Assignee</label>
                 <br>
                 <select id="issue-assignee" ng-required ng-model="model.assignee" ng-options="user.Username for user in users | orderBy:'Username' track by user.Id"></select>
@@ -28,7 +35,7 @@
                     <auto-complete source="loadLabels($query)" min-length="2"></auto-complete>
                 </tags-input>
                 <br>
-                <button class="btn btn-primary" ng-click="save(model)">Save</button>
+                <button class="btn btn-primary" ng-click="save(model, newIssue)">Save</button>
             </form>
         </div>
     </div>
