@@ -5,6 +5,20 @@ angular.module('issueTrackingSystem.projects')
         '$httpParamSerializerJQLike',
         'BASE_URL',
         function($http, $q, $httpParamSerializerJQLike, BASE_URL) {
+            function getAllProjects(projectsParams) {
+                var deferred = $q.defer();
+                projectsParams.filter = '';
+
+                $http.get(BASE_URL + 'projects?' + $httpParamSerializerJQLike(projectsParams))
+                    .then(function(response) {
+                        deferred.resolve(response.data)
+                    }, function(error) {
+                        console.log(error);
+                    });
+
+                return deferred.promise;
+            }
+
             function getProjectById(id) {
                 var deferred = $q.defer();
 
@@ -47,9 +61,24 @@ angular.module('issueTrackingSystem.projects')
                 return deferred.promise;
             }
 
+            function addProject(project) {
+                var deferred = $q.defer();
+
+                $http.post(BASE_URL + 'projects', project)
+                    .then(function(response) {
+                        deferred.resolve(response.data)
+                    }, function(error) {
+                        console.log(error);
+                    });
+
+                return deferred.promise;
+            }
+
             return {
+                getAllProjects: getAllProjects,
                 getProjectById: getProjectById,
                 getUserProjects: getUserProjects,
-                editProject: editProject
+                editProject: editProject,
+                addProject: addProject
             }
         }]);

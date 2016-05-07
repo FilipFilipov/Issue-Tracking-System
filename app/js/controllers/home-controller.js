@@ -18,6 +18,7 @@ angular.module('issueTrackingSystem.home', [
         'projects',
         function($scope, $rootScope, $route, $q, authentication, users, issues, projects) {
             $scope.isAuthenticated = $rootScope.isAuthenticated;
+            $scope.isAdmin = $rootScope.currentUser && $rootScope.currentUser.isAdmin;
 
             if ($scope.isAuthenticated) {
                 $scope.issueParams = {

@@ -1,5 +1,6 @@
 <div class="panel panel-primary">
-    <div class="panel-heading">Project Edit Page</div>
+    <div class="panel-heading" ng-if="!newProject">Edit Project</div>
+    <div class="panel-heading" ng-if="newProject">Add Project</div>
     <div class="panel-body">
         <div class="col-md-6 border">
             <form name="projectForm" ng-class="{ submitFailed: submitFailed }">
@@ -10,6 +11,11 @@
                 <br>
                 <textarea required ng-model="model.description" id="project-description" class="form-control"></textarea>
                 <br>
+                <div ng-if="newProject">
+                    <label for="project-key">Project Key<span>*</span></label>
+                    <input type="text" required ng-model="model.projectKey" id="project-key" class="form-control" />
+                    <br>
+                </div>
                 <label for="project-lead">Lead<span>*</span></label>
                 <br>
                 <select id="project-lead" required ng-model="model.lead" ng-options="user.Username for user in users | orderBy:'Username' track by user.Id">

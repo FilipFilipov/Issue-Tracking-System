@@ -1,0 +1,15 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">Projects</div>
+    <div class="panel-body">
+        <h3>All projects</h3>
+        <pagination total-items="projects.TotalCount" ng-model="projectsParams.pageNumber" items-per-page="projectsParams.pageSize" ng-change="reloadProjects()" max-size="9" boundary-links="true"></pagination>
+        <div ng-repeat="project in projects.Projects | orderBy:'Name'">
+            <h4 style="display: inline-block"><a href="#/projects/{{project.Id}}">{{project.Name}}</a></h4>
+            <div class="btn-group" style="vertical-align: baseline">
+                <a class="btn btn-xs btn-success" href="#/projects/{{project.Id}}/edit">Edit</a>
+                <a class="btn btn-xs btn-success" href="#/projects/{{project.Id}}/add-issue">Add Issue</a>
+            </div>
+        </div>
+        <pagination total-items="projects.TotalCount" ng-model="projectsParams.pageNumber" items-per-page="projectsParams.pageSize" ng-change="reloadProjects()" max-size="9" boundary-links="true"></pagination>
+    </div>
+</div>
