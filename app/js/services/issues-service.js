@@ -33,6 +33,24 @@ angular.module('issueTrackingSystem.issues')
                 return deferred.promise;
             }
 
+            function getUserIssuesInProject(userId, projectId) {
+                var deferred = $q.defer();
+
+                var issuesParams = {
+                    pageSize: 1000,
+                    pageNumber: 1,
+                    filter: 'Project.Id == ' + projectId + ' and Assignee.Id == "' + userId + '"'
+                };
+                $http.get(BASE_URL + 'issues/?' + $httpParamSerializerJQLike(issuesParams))
+                    .then(function(response) {
+                        deferred.resolve(response.data.Issues)
+                    }, function(error) {
+                        console.log(error);
+                    });
+
+                return deferred.promise;
+            }
+
             function getProjectIssues(id) {
                 var deferred = $q.defer();
 
@@ -88,6 +106,7 @@ angular.module('issueTrackingSystem.issues')
             return {
                 getIssueById: getIssueById,
                 getUserIssues: getUserIssues,
+                getUserIssuesInProject: getUserIssuesInProject,
                 getProjectIssues: getProjectIssues,
                 addIssue: addIssue,
                 editIssue: editIssue,

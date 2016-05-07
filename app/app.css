@@ -31,6 +31,13 @@
 label > span {
     color: red;
 }
+.table {
+    table-layout: fixed;
+}
+
+.table td {
+    word-wrap: break-word;
+}
 
 select.ng-pristine.ng-invalid-required {
     box-shadow: none;

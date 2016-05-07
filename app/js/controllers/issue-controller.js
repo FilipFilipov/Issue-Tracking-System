@@ -2,14 +2,17 @@ angular.module('issueTrackingSystem.issues', [])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider
             .when('/issues/:issueId', {
+                name: 'displayIssue',
                 templateUrl: 'app/templates/views/issue.html',
                 controller: 'IssueCtrl'
             })
             .when('/issues/:issueId/edit', {
+                name: 'editIssue',
                 templateUrl: 'app/templates/views/issue-add-or-edit.html',
                 controller: 'IssueCtrl'
             })
             .when('/projects/:projectId/add-issue', {
+                name: 'addIssue',
                 templateUrl: 'app/templates/views/issue-add-or-edit.html',
                 controller: 'IssueCtrl'
             });
@@ -18,17 +21,21 @@ angular.module('issueTrackingSystem.issues', [])
         '$scope',
         '$rootScope',
         '$q',
+        '$route',
         '$routeParams',
         '$location',
         'users',
         'issues',
         'projects',
         'labels',
-        function($scope, $rootScope, $q, $routeParams, $location, users, issues, projects, labels) {
+        'comments',
+        function($scope, $rootScope, $q, $route, $routeParams, $location, users, issues, projects, labels, comments) {
             var issueId = $routeParams.issueId;
             var projectId = $routeParams.projectId;
             var userId = $rootScope.currentUser.Id;
-            var newIssue = !!projectId;
+            var newIssue = $route.current.$$route.name == 'addIssue';
+            var editIssue = $route.current.$$route.name == 'editIssue';
+            var displayIssue = $route.current.$$route.name == 'displayIssue';
             var issue, project;
 
             var getIssue = function(issueId) {
@@ -48,13 +55,45 @@ angular.module('issueTrackingSystem.issues', [])
                 return projects.getProjectById(projectId || data.Project.Id)
             };
 
+            var getComments = function(data) {
+                if(newIssue || $location.path().indexOf('edit') !== -1) {
+                    return $q.when([]);
+                }
+                else {
+                    return comments.getCommentsForIssue(data.Id);
+                }
+            };
+
+            var getAllUsers = function() {
+                return users.getAllUsers();
+            };
+
+            var getUserProjects = function() {
+                if(newIssue) {
+                    return projects.getUserProjects({filter: 'Lead.Id="' + userId + '"'});
+                }
+                else {
+                    return $q.when([]);
+                }
+            };
+
+            var saveComment = function(comment) {
+                comments.addComment(issueId, comment)
+                    .then(function() {
+                        $route.reload();
+                    });
+            };
+
             getIssue(issueId)
                 .then(function(issue){
-                    return getProject(issue)
+                    return $q.all([getProject(issue), getComments(issue)]);
                 })
                 .then(function(data) {
-                    project = data;
-                    $scope.canEdit = project.Lead.Id === userId;
+                    project = data[0];
+                    issue.Comments = data[1];
+
+                    var userIsLead = project.Lead.Id === userId;
+                    $scope.canEdit = userIsLead;
 
                     if($scope.canChangeStatus) {
                         $scope.changeStatus = function(issueId, status) {
@@ -67,21 +106,25 @@ angular.module('issueTrackingSystem.issues', [])
                         }
                     }
 
-                    if($scope.canEdit) {
+                    if(displayIssue){
+                        var userIsAssignee = issue.Assignee.Id === userId;
+                        if(userIsLead || userIsAssignee) {
+                            $scope.canComment = true;
+                            $scope.saveComment = saveComment;
+                        }
+                        else {
+                            issues.getUserIssuesInProject(userId, project.Id)
+                                .then(function(issue) {
+                                    if(issue.length > 0){
+                                        $scope.canComment = true;
+                                        $scope.saveComment = saveComment;
+                                    }
+                                });
+                        }
+                    }
+
+                    if(newIssue || editIssue) {
                         $scope.newIssue = newIssue;
-
-                        var getAllUsers = function() {
-                            return users.getAllUsers();
-                        };
-
-                        var getUserProjects = function() {
-                            if(newIssue) {
-                                return projects.getUserProjects({filter: 'Lead.Id="' + userId + '"'});
-                            }
-                            else {
-                                return $q.when([]);
-                            }
-                        };
 
                         $q.all([getAllUsers(), getUserProjects()])
                             .then(function(data) {

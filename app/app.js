@@ -13,6 +13,7 @@ angular.module('issueTrackingSystem', [
     'issueTrackingSystem.issues',
     'issueTrackingSystem.projects',
     'issueTrackingSystem.labels',
+    'issueTrackingSystem.comments',
     'issueTrackingSystem.filters.unique'
 ])
     .controller('MainCtrl', [

@@ -23,3 +23,21 @@
         </div>
     </div>
 </div>
+
+<div ng-repeat="comment in issue.Comments | orderBy:'CreatedOn'" class="panel panel-info">
+    <div class="panel-heading">{{comment.Author.Username}} - {{comment.CreatedOn}}</div>
+    <div class="panel-body">
+        {{comment.Text}}
+    </div>
+</div>
+
+<div ng-if="canComment">
+    <form name="commentForm">
+        <label for="comment-text">Text</label>
+        <br>
+        <textarea required ng-model="comment.text" id="comment-text" class="form-control"></textarea>
+        <br>
+        <button class="btn btn-primary" ng-click="saveComment(comment)">Add Comment</button>
+        <br><br>
+    </form>
+</div>
