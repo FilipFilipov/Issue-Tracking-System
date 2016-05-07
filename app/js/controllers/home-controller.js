@@ -12,11 +12,12 @@ angular.module('issueTrackingSystem.home', [
         '$rootScope',
         '$route',
         '$q',
+        'toastr',
         'authentication',
         'users',
         'issues',
         'projects',
-        function($scope, $rootScope, $route, $q, authentication, users, issues, projects) {
+        function($scope, $rootScope, $route, $q, toastr, authentication, users, issues, projects) {
             $scope.isAuthenticated = $rootScope.isAuthenticated;
             $scope.isAdmin = $rootScope.currentUser && $rootScope.currentUser.isAdmin;
 
@@ -58,6 +59,7 @@ angular.module('issueTrackingSystem.home', [
                             })
                             .then(function() {
                                 $route.reload();
+                                toastr.success('Welcome ' + $rootScope.currentUser.Username)
                             });
                     }
                     else {
@@ -66,9 +68,9 @@ angular.module('issueTrackingSystem.home', [
                 };
 
                 $scope.register = function (user) {
-                    if($scope.changePasswordForm.$valid) {
+                    if($scope.registerUserForm.$valid) {
                         if(user.password !== user.confirmPassword) {
-                            console.warn('Passwords do not match!');
+                            toastr.error('Passwords do not match!');
                         }
                         else {
                             authentication.registerUser(user)
@@ -80,6 +82,7 @@ angular.module('issueTrackingSystem.home', [
                                 })
                                 .then(function() {
                                     $route.reload();
+                                    toastr.success('User ' + $rootScope.currentUser.Username + 'has been registered.');
                                 });
                         }
                     }

@@ -3,10 +3,14 @@
 // Declare app level module which depends on views, and components
 angular.module('issueTrackingSystem', [
     'ngRoute',
+    'ngAnimate',
+    'angular-loading-bar',
     'ui.bootstrap.pagination',
     '720kb.datepicker',
     'ngTagsInput',
+    'toastr',
     'frapontillo.ex.filters',
+    'issueTrackingSystem.common',
     'issueTrackingSystem.home',
     'issueTrackingSystem.authentication',
     'issueTrackingSystem.users',
@@ -16,38 +20,6 @@ angular.module('issueTrackingSystem', [
     'issueTrackingSystem.comments',
     'issueTrackingSystem.filters.unique'
 ])
-    .controller('MainCtrl', [
-        '$rootScope',
-        '$scope',
-        '$location',
-        '$route',
-        'authentication',
-        'users',
-        function($rootScope, $scope, $location, $route, authentication, users) {
-            $scope.logout = function() {
-                authentication.logout();
-
-                if($location.path() === '/') {
-                    $route.reload();
-                }
-            };
-
-            $scope.changePassword = function(password){
-                if($scope.changePasswordForm.$valid) {
-                    if(password.newPassword !== password.confirmPassword) {
-                        console.warn('Passwords do not match!');
-                    }
-                    else{
-                        authentication.changePassword(password);
-                        $location.path('/');
-                    }
-                }
-                else {
-                    $scope.submitFailed = true;
-                }
-            }
-        }
-    ])
     .run([
         '$rootScope',
         '$location',
@@ -66,12 +38,12 @@ angular.module('issueTrackingSystem', [
     ])
     .config([
         '$routeProvider',
-        function ($routeProvider){
-            $routeProvider
-                .when('/profile/password', {
-                    templateUrl: 'app/templates/views/change-password.html',
-                    controller: 'MainCtrl'
-                })
-                .otherwise({redirectTo: '/'});
+        'toastrConfig',
+        function ($routeProvider, toastrConfig){
+            $routeProvider.otherwise({redirectTo: '/'});
+
+            angular.extend(toastrConfig, {
+                positionClass: 'toast-top-center'
+            });
         }])
     .constant('BASE_URL', 'http://softuni-issue-tracker.azurewebsites.net/');
