@@ -29,9 +29,12 @@ angular.module('issueTrackingSystem.common', [])
                         toastr.error('Passwords do not match!');
                     }
                     else{
-                        authentication.changePassword(password);
-                        toastr.success('Password has been changed');
-                        $location.path('/');
+                        authentication. changePassword(password)
+                            .then(function() {
+                                toastr.success('Password has been changed');
+                                $location.path('/');
+                            });
+
                     }
                 }
                 else {

@@ -155,12 +155,12 @@ angular.module('issueTrackingSystem.issues', [])
                                     labels: issue.Labels
                                 };
 
-                                $scope.save = function(issue, newIssue) {
+                                $scope.save = function(issue) {
                                     if($scope.issueForm.$valid) {
                                         issue.assigneeId = issue.assignee.Id;
                                         issue.priorityId = issue.priority.Id;
 
-                                        if(newIssue) {
+                                        if($scope.newIssue) {
                                             issue.projectId = issue.project.Id;
                                             issues.addIssue(issue)
                                                 .then(function() {

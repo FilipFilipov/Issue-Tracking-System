@@ -5,8 +5,9 @@ angular.module('issueTrackingSystem.authentication', [])
         '$q',
         '$location',
         '$httpParamSerializerJQLike',
+        'toastr',
         'BASE_URL',
-        function($rootScope, $http, $q, $location, $httpParamSerializerJQLike, BASE_URL) {
+        function($rootScope, $http, $q, $location, $httpParamSerializerJQLike, toastr, BASE_URL) {
             function registerUser(user) {
                 var deferred = $q.defer();
 
@@ -33,7 +34,7 @@ angular.module('issueTrackingSystem.authentication', [])
 
                         deferred.resolve();
                     }, function (error) {
-                        console.log(error);
+                        toastr.error(error.data.error_description);
                     });
 
                 return deferred.promise;
